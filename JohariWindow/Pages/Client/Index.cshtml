@@ -1,0 +1,35 @@
+﻿@page
+@model JohariWindow.Pages.Client.IndexModel
+
+<form method="post" asp-action="Index">
+    <input type="hidden" asp-for="@Model.ClientResponseVM.Client.ClientID" />
+    <div class="container">
+        <div class="row">
+            <h3>@Model.ClientResponseVM.Client.FirstName @Model.ClientResponseVM.Client.LastName</h3>
+        </div>
+        <div class="row">
+            <div class="col-12 my-3">
+                Select the responses that fit your personality. When done, click submit to save the response.
+                <br />
+                If you do not understand the adjective, hover over to word for additional information
+            </div>
+        </div>
+        <div class="row">
+            @for (int i = 0; i < Model.ClientResponseVM.Adjectives.Count; i++)
+            {
+                <div class="col-4 mb-3">
+                    <input asp-for="@Model.ClientResponseVM.Adjectives[i].Value" type="hidden" />
+                    <input asp-for="@Model.ClientResponseVM.Adjectives[i].Text" type="hidden" />
+                    <input id="@Model.ClientResponseVM.Adjectives[i].Text" asp-for="@Model.ClientResponseVM.Adjectives[i].Selected" />
+                    <label for="@Model.ClientResponseVM.Adjectives[i].Text"
+                           data-bs-toggle="tooltip" data-bs-placement="top" title="@Model.Adjectives[i].AdjDefinition">
+                        @Model.ClientResponseVM.Adjectives[i].Text
+                    </label>
+                </div>
+            }
+        </div>
+        <div>
+            <button type="submit" class="btn btn-outline-success">Submit</button>
+        </div>
+    </div>
+</form>
