@@ -14,9 +14,7 @@ namespace JohariWindow.Pages.Client
     public class IndexModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
-        //redid the purpose of this.
-        //Original purpose: handle information for displaying and receiving, however most receiving info is empty.
-        //New purpose: handle information for receiving. 
+
         [BindProperty]
         public ClientResponseViewModel ClientResponseVM { get; set; }
 
