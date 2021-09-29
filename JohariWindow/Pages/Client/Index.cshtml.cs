@@ -14,13 +14,16 @@ namespace JohariWindow.Pages.Client
     public class IndexModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
+        //redid the purpose of this.
+        //Original purpose: handle information for displaying and receiving, however most receiving info is empty.
+        //New purpose: handle information for receiving. 
         [BindProperty]
         public ClientResponseViewModel ClientResponseVM { get; set; }
 
-
-        private IEnumerable<ClientResponse> PreviousResponses = null;
-        public List<Adjective> Adjectives;
-
+        //Used to check against any previous responses saved
+        private List<ClientResponse> PreviousResponses = null;
+        public List<Adjective> AllAdjectives;
+        public ApplicationCore.Models.Client Client;
 
         public IndexModel(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
@@ -31,8 +34,11 @@ namespace JohariWindow.Pages.Client
                 return NotFound();
             }
 
+            ClientResponseVM = new ClientResponseViewModel();
+            LoadClient(clientID.Value);
             LoadPreviousResponses(clientID.Value);
-            LoadVM(clientID.Value);
+            LoadAdjectives();
+            ClientResponseVM.ClientID = clientID.Value;
             return Page();
         }
 
@@ -43,7 +49,7 @@ namespace JohariWindow.Pages.Client
                 return Page();
             }
 
-            LoadPreviousResponses(ClientResponseVM.Client.ClientID);
+            LoadPreviousResponses(ClientResponseVM.ClientID);
             DeletePreviousResponses();
             SaveResponses();
             _unitOfWork.Commit();
@@ -54,21 +60,32 @@ namespace JohariWindow.Pages.Client
         /// <summary>
         /// Populates the VM and other model data.
         /// </summary>
-        /// <param name="clientID">ID of the client the information will go off of.</param>
-        private void LoadVM(int clientID)
+        private void LoadAdjectives()
         {
-            Adjectives = _unitOfWork.Adjective.List().OrderBy(i => i.AdjName).ToList();
-            var client = _unitOfWork.Client.Get(x => x.ClientID == clientID, true);
-            ClientResponseVM = new ClientResponseViewModel()
-            {
-                Client = client,
-                Adjectives = Adjectives.Select(x => new SelectListItem
-                {
-                    Text = x.AdjName,
-                    Value = x.AdjectiveID.ToString(),
-                    Selected = PreviousResponses != null && PreviousResponses.Select(x => x.AdjectiveID).Contains(x.AdjectiveID)
-                }).ToList()
-            };
+            AllAdjectives = _unitOfWork.Adjective.List().OrderBy(i => i.AdjName).ToList();
+            ClientResponseVM.PositiveAdjectives = AllAdjectives.Where(i => i.AdjType).Select
+                (x =>
+                    new SelectListItem
+                    {
+                        Text = x.AdjName,
+                        Value = x.AdjectiveID.ToString(),
+                        Selected = PreviousResponses.Any(i => i.AdjectiveID == x.AdjectiveID)
+                    }
+                ).ToList();
+            ClientResponseVM.NegativeAdjectives = AllAdjectives.Where(i => !i.AdjType).Select
+                (x =>
+                    new SelectListItem
+                    {
+                        Text = x.AdjName,
+                        Value = x.AdjectiveID.ToString(),
+                        Selected = PreviousResponses.Any(i => i.AdjectiveID == x.AdjectiveID)
+                    }
+                ).ToList();
+        }
+
+        private void LoadClient(int clientID)
+        {
+            Client = _unitOfWork.Client.Get(i => i.ClientID == clientID);
         }
 
         /// <summary>
@@ -77,7 +94,7 @@ namespace JohariWindow.Pages.Client
         /// <param name="clientID">Client ID that responses are for.</param>
         private void LoadPreviousResponses(int clientID)
         {
-            PreviousResponses = _unitOfWork.ClientResponse.List(x => x.ClientID == clientID);
+            PreviousResponses = _unitOfWork.ClientResponse.List(x => x.ClientID == clientID).ToList();
         }
 
         /// <summary>
@@ -99,7 +116,10 @@ namespace JohariWindow.Pages.Client
         /// </summary>
         private void SaveResponses()
         {
-            var responsesToSave = ClientResponseVM.Adjectives.Where(i => i.Selected).Select(x => new ClientResponse { ClientID = ClientResponseVM.Client.ClientID, AdjectiveID = Convert.ToInt32(x.Value) });
+            var responsesToSave = ClientResponseVM.PositiveAdjectives.Where(i => i.Selected)
+                .Select(x => new ClientResponse { ClientID = ClientResponseVM.ClientID, AdjectiveID = Convert.ToInt32(x.Value) }).ToList();
+            responsesToSave.AddRange(ClientResponseVM.NegativeAdjectives.Where(i => i.Selected)
+                .Select(x => new ClientResponse { ClientID = ClientResponseVM.ClientID, AdjectiveID = Convert.ToInt32(x.Value) }));
             foreach (var response in responsesToSave)
             {
                 _unitOfWork.ClientResponse.Add(response);
