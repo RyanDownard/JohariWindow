@@ -84,9 +84,6 @@ namespace JohariWindow.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            //retrieve the role from the form
-            string role = Request.Form["rdUserRole"].ToString();
-            if (role == "") { role = StaticDetails.ManagerRole; } //make the first login a manager)
             returnUrl ??= Url.Content("~/"); //null-coalescing assignment operator ??= assigns the value of right-hand operand to its left-hand operand only if the left-hand is nulll
             if (ModelState.IsValid)
             {
@@ -101,17 +98,16 @@ namespace JohariWindow.Areas.Identity.Pages.Account
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 //add the roles to the ASPNET Roles table if they do not exist yet
-                if (!await _roleManager.RoleExistsAsync(StaticDetails.ManagerRole))
+                if (!await _roleManager.RoleExistsAsync(StaticDetails.AdminRole))
                 {
-                    _roleManager.CreateAsync(new IdentityRole(StaticDetails.ManagerRole)).GetAwaiter().GetResult();
+                    _roleManager.CreateAsync(new IdentityRole(StaticDetails.AdminRole)).GetAwaiter().GetResult();
                     _roleManager.CreateAsync(new IdentityRole(StaticDetails.UserRole)).GetAwaiter().GetResult();
                 }
                 if (result.Succeeded)
-                //assign role to the user (from the form radio options available after the first manager is created)
                 {
-                    if (role == StaticDetails.ManagerRole)
+                    if (await _roleManager.RoleExistsAsync(StaticDetails.AdminRole))
                     {
-                        await _userManager.AddToRoleAsync(user, StaticDetails.ManagerRole);
+                        await _userManager.AddToRoleAsync(user, StaticDetails.AdminRole);
                     }
                     else
                     {
