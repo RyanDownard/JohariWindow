@@ -6,7 +6,7 @@ namespace Infrastructure.Services
 {
     public class StaticDetails
     {
-        public const string ManagerRole = "Administrator";
+        public const string AdminRole = "Administrator";
         public const string UserRole = "User";
     }
 }
