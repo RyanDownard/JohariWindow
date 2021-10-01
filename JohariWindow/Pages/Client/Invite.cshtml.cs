@@ -14,5 +14,10 @@ namespace JohariWindow.Pages.Client
         public void OnGet()
         {
         }
+
+        public void OnPost()
+        {
+
+        }
     }
 }
