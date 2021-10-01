@@ -9,7 +9,8 @@ namespace JohariWindow.ViewModels
 {
     public class ClientResponseViewModel
     {
-        public Client Client { get; set; }
-        public List<SelectListItem> Adjectives { get; set; }
+        public int ClientID { get; set; }
+        public List<SelectListItem> PositiveAdjectives { get; set; }
+        public List<SelectListItem> NegativeAdjectives { get; set; }
     }
 }

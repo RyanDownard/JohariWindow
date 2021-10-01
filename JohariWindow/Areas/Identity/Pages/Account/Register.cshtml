@@ -11,7 +11,7 @@
                 <div class="card-body px-lg-5 pt-4">
                     <form method="post" autocomplete="off" asp-route-returnUrl="@Model.ReturnUrl">
                         <h3 class="col-12 text-success text-center py-4">
-                            @if (User.IsInRole(StaticDetails.ManagerRole))
+                            @if (User.IsInRole(StaticDetails.AdminRole))
                             {
                                 <strong>Register a User</strong> 
                             }
