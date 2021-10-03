@@ -14,7 +14,11 @@ namespace ApplicationCore.Models
         public string LastName { get; set; }
         public DateTime DOB { get; set; }
         public string Gender { get; set; }
-        
+
+        [NotMapped]
+        public string FullName { get { return FirstName + " " + LastName; } }
+
+
         [ForeignKey("ClientID")]
         public virtual ApplicationUser ApplicationUser { get; set; }
     }
