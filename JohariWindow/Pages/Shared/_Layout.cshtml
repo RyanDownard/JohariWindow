@@ -1,4 +1,10 @@
 ﻿@using Infrastructure.Services
+@using ApplicationCore.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var appUser = await UserManager.GetUserAsync(User);
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,10 +36,10 @@
                                 </li>
                             }
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Client/Index" asp-route-clientID="1">Submit Response</a>
+                                <a class="nav-link text-dark" asp-page="/Client/Index" asp-route-clientID="@appUser.ClientID">Submit Response</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Client/Invite" asp-route-clientID="1">Invite Friend</a>
+                                <a class="nav-link text-dark" asp-page="/Client/Invite" asp-route-clientID="@appUser.ClientID">Invite Friend</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-page="/Client/View">Your Window</a>
