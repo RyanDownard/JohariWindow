@@ -134,18 +134,6 @@ namespace Infrastructure.Data
                 context.Adjective.AddRange(adjectives);
             }
 
-            if (!context.Client.Any())
-            {
-                var client = new Client
-                {
-                    FirstName = "Ryan",
-                    LastName = "Downard",
-                    DOB = new DateTime(1991, 2, 7),
-                    Gender = "Male"
-                };
-                context.Client.Add(client);
-            }
-
             context.SaveChanges();
         }
     }

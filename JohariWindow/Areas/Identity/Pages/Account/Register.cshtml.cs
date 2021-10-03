@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using ApplicationCore.Interfaces;
 using ApplicationCore.Models;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -25,6 +26,7 @@ namespace JohariWindow.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
@@ -32,6 +34,7 @@ namespace JohariWindow.Areas.Identity.Pages.Account
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
+            IUnitOfWork unitOfWork,
             RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
@@ -39,6 +42,7 @@ namespace JohariWindow.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _unitOfWork = unitOfWork;
         }
 
         [BindProperty]
@@ -87,16 +91,26 @@ namespace JohariWindow.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/"); //null-coalescing assignment operator ??= assigns the value of right-hand operand to its left-hand operand only if the left-hand is nulll
             if (ModelState.IsValid)
             {
+                var client = new Client
+                {
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName,
+                    DOB = new DateTime(1991, 2, 7),
+                    Gender = "Male"
+                };
+                _unitOfWork.Client.Add(client);
+                _unitOfWork.Commit();
                 //expand identityuser with applicationuser properties
                 var user = new ApplicationUser
                 {
                     UserName = Input.Email,
                     Email = Input.Email,
-                    FirstName = Input.FirstName,
-                    LastName = Input.LastName,
-                    PhoneNumber = Input.PhoneNumber
+                    PhoneNumber = Input.PhoneNumber,
+                    Client = client
                 };
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
                 
                 //add the roles to the ASPNET Roles table if they do not exist yet
                 if (!await _roleManager.RoleExistsAsync(StaticDetails.AdminRole))
