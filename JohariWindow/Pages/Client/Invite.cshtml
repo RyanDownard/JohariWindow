@@ -1,9 +1,10 @@
-﻿@page
+﻿@page "{clientID}"
 @model JohariWindow.Pages.Client.InviteModel
 @{
 }
 <form method="post" asp-action="Index">
     <div class="container">
+        <input type="hidden" asp-for="@Model.ClientID" />
         <div class="row">
             <h2 class="border-bottom">Invite Friends/Family</h2>
             <div class="col-12">
@@ -12,24 +13,43 @@
             </div>
         </div>
         <div id="emailList">
-            <div class="form-group row my-2 emailRow">
+            <div class="form-group row my-2">
                 <div class="col-auto">
-                    <label>Email</label>
+                    <label>Friend 1</label>
                 </div>
                 <div class="col-5">
-                    <input type="email" required class="inviteEmail form-control" name="emails[0]" />
+                    <input type="email" required class="form-control" name="emails[0]" />
+                </div>
+            </div>
+            <div class="form-group row my-2">
+                <div class="col-auto">
+                    <label>Friend 2</label>
+                </div>
+                <div class="col-5">
+                    <input type="email" required class="form-control" name="emails[1]" />
+                </div>
+            </div>
+            <div class="form-group row my-2">
+                <div class="col-auto">
+                    <label>Friend 3</label>
+                </div>
+                <div class="col-5">
+                    <input type="email" required class="form-control" name="emails[2]" />
+                </div>
+            </div>
+            <div class="form-group row my-2">
+                <div class="col-auto">
+                    <label>Friend 4</label>
+                </div>
+                <div class="col-5">
+                    <input type="email" required class="form-control" name="emails[3]" />
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <button type="button" id="addEmail" class="btn btn-outline-primary">Add Email</button>
-                <button type="submit" class="btn btn-outline-success">Send Invite(s)</button>
+                <button type="submit" class="btn btn-outline-success">Send Invites</button>
             </div>
         </div>
     </div>
 </form>
-@section Scripts
-{
-    <script src="~/js/invite.js"></script>
-}

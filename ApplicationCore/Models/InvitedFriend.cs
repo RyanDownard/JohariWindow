@@ -6,16 +6,15 @@ using System.Text;
 
 namespace ApplicationCore.Models
 {
-    public class Client
+    public class InvitedFriend
     {
         [Key]
+        public int InvitedFriendID { get; set; }
         public int ClientID { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateTime DOB { get; set; }
-        public string Gender { get; set; }
-        
+        public string Email { get; set; }
+        public bool Accepted { get; set; }
+
         [ForeignKey("ClientID")]
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public Client Client { get; set; }
     }
 }

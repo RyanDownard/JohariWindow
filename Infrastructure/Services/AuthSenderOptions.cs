@@ -6,7 +6,7 @@ namespace Infrastructure.Services
 {
     public class AuthSenderOptions
     {
-        private readonly string user = "Food Delivery";
+        private readonly string user = "Johari Window";
 
         private readonly string key = "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";
         public string SendGridUser { get { return user; } }

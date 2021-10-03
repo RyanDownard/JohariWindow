@@ -18,8 +18,6 @@ namespace JohariWindow.Pages.Client
         [BindProperty]
         public ClientResponseViewModel ClientResponseVM { get; set; }
 
-        //Used to check against any previous responses saved
-        private List<ClientResponse> PreviousResponses = null;
         public List<Adjective> AllAdjectives;
         public ApplicationCore.Models.Client Client;
 
@@ -32,9 +30,13 @@ namespace JohariWindow.Pages.Client
                 return NotFound();
             }
 
+            if(_unitOfWork.ClientResponse.List(i => i.ClientID == clientID).Any())
+            {
+                return RedirectToPage("/Client/ResponseSubmitted");
+            }
+
             ClientResponseVM = new ClientResponseViewModel();
             LoadClient(clientID.Value);
-            LoadPreviousResponses(clientID.Value);
             LoadAdjectives();
             ClientResponseVM.ClientID = clientID.Value;
             return Page();
@@ -46,13 +48,10 @@ namespace JohariWindow.Pages.Client
             {
                 return Page();
             }
-
-            LoadPreviousResponses(ClientResponseVM.ClientID);
-            DeletePreviousResponses();
             SaveResponses();
             _unitOfWork.Commit();
 
-            return RedirectToPage("../Index");
+            return RedirectToPage("/Client/Thanks");
         }
 
         /// <summary>
@@ -66,8 +65,7 @@ namespace JohariWindow.Pages.Client
                     new SelectListItem
                     {
                         Text = x.AdjName,
-                        Value = x.AdjectiveID.ToString(),
-                        Selected = PreviousResponses.Any(i => i.AdjectiveID == x.AdjectiveID)
+                        Value = x.AdjectiveID.ToString()
                     }
                 ).ToList();
             ClientResponseVM.NegativeAdjectives = AllAdjectives.Where(i => !i.AdjType).Select
@@ -75,8 +73,7 @@ namespace JohariWindow.Pages.Client
                     new SelectListItem
                     {
                         Text = x.AdjName,
-                        Value = x.AdjectiveID.ToString(),
-                        Selected = PreviousResponses.Any(i => i.AdjectiveID == x.AdjectiveID)
+                        Value = x.AdjectiveID.ToString()
                     }
                 ).ToList();
         }
@@ -86,28 +83,6 @@ namespace JohariWindow.Pages.Client
             Client = _unitOfWork.Client.Get(i => i.ClientID == clientID);
         }
 
-        /// <summary>
-        /// Loads the previous responses. Used for showing what was previously selected or deleting previous entries.
-        /// </summary>
-        /// <param name="clientID">Client ID that responses are for.</param>
-        private void LoadPreviousResponses(int clientID)
-        {
-            PreviousResponses = _unitOfWork.ClientResponse.List(x => x.ClientID == clientID).ToList();
-        }
-
-        /// <summary>
-        /// Deletes previous responses in the database.
-        /// </summary>
-        private void DeletePreviousResponses()
-        {
-            if (PreviousResponses != null)
-            {
-                foreach (var response in PreviousResponses)
-                {
-                    _unitOfWork.ClientResponse.Delete(response);
-                }
-            }
-        }
 
         /// <summary>
         /// Saves the users new selections.

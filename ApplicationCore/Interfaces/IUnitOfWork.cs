@@ -13,6 +13,7 @@ namespace ApplicationCore.Interfaces
         public IGenericRepository<ClientResponse> ClientResponse { get; }
         public IGenericRepository<Friend> Friend { get; }
         public IGenericRepository<FriendResponse> FriendResponse { get; }
+        public IGenericRepository<InvitedFriend> InvitedFriend { get; }
         int Commit();
         Task<int> CommitAsync();
     }

@@ -19,6 +19,7 @@ namespace Infrastructure.Data
         private IGenericRepository<ClientResponse> _ClientResponse;
         private IGenericRepository<Friend> _Friend;
         private IGenericRepository<FriendResponse> _FriendResponse;
+        private IGenericRepository<InvitedFriend> _InvitedFriend;
 
         public IGenericRepository<Adjective> Adjective 
         {
@@ -77,6 +78,18 @@ namespace Infrastructure.Data
                     _FriendResponse = new GenericRepository<FriendResponse>(_dbContext);
                 }
                 return _FriendResponse;
+            }
+        }
+
+        public IGenericRepository<InvitedFriend> InvitedFriend
+        {
+            get
+            {
+                if(_InvitedFriend == null)
+                {
+                    _InvitedFriend = new GenericRepository<InvitedFriend>(_dbContext);
+                }
+                return _InvitedFriend;
             }
         }
 

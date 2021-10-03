@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace JohariWindow.ViewModels
 {
-    public class ClientResponseViewModel
+    public class ClientResponseViewModel : ResponseViewModel
     {
         public int ClientID { get; set; }
-        public List<SelectListItem> PositiveAdjectives { get; set; }
-        public List<SelectListItem> NegativeAdjectives { get; set; }
+
     }
 }

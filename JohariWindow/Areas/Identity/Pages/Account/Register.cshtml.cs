@@ -84,9 +84,6 @@ namespace JohariWindow.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            //retrieve the role from the form
-            string role = Request.Form["rdUserRole"].ToString();
-            if (role == "") { role = StaticDetails.AdminRole; } //make the first login a manager)
             returnUrl ??= Url.Content("~/"); //null-coalescing assignment operator ??= assigns the value of right-hand operand to its left-hand operand only if the left-hand is nulll
             if (ModelState.IsValid)
             {
@@ -109,7 +106,7 @@ namespace JohariWindow.Areas.Identity.Pages.Account
                 }
                 if (result.Succeeded)
                 {
-                    if (_userManager.GetUsersInRoleAsync(StaticDetails.AdminRole).Result.Count == 0 || role == StaticDetails.AdminRole)
+                    if (_userManager.GetUsersInRoleAsync(StaticDetails.AdminRole).Result.Count == 0)
                     {
                         await _userManager.AddToRoleAsync(user, StaticDetails.AdminRole);
                     }

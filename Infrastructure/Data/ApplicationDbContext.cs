@@ -20,5 +20,6 @@ namespace Infrastructure.Data
         public DbSet<ClientResponse> ClientResponse { get; set; }
         public DbSet<Friend> Friend { get; set; }
         public DbSet<FriendResponse> FriendResponse { get; set; }
+        public DbSet<InvitedFriend> InvitedFriend { get; set; }
     }
 }
