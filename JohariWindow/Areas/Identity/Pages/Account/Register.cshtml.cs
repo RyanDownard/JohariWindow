@@ -64,6 +64,12 @@ namespace JohariWindow.Areas.Identity.Pages.Account
             [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
             [Required]
+            [Display(Name = "Birthday")]
+            public DateTime DOB { get; set; }
+            [Required]
+            [Display(Name = "Gender")]
+            public string Gender { get; set; }
+            [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -95,8 +101,8 @@ namespace JohariWindow.Areas.Identity.Pages.Account
                 {
                     FirstName = Input.FirstName,
                     LastName = Input.LastName,
-                    DOB = new DateTime(1991, 2, 7),
-                    Gender = "Male"
+                    DOB = Input.DOB,
+                    Gender = Input.Gender
                 };
                 _unitOfWork.Client.Add(client);
                 _unitOfWork.Commit();
