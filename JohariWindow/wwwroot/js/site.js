@@ -6,3 +6,16 @@ var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggl
 var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
 })
+
+function validateCheckBoxes() {
+    var positiveChecked = $('.positiveAttribute:checkbox:checked').length;
+    var negativeChecked = $('.negativeAttribute:checkbox:checked').length;
+    if (positiveChecked !== 12) {
+        alert("12 positive adjectives must be selected. You have " + positiveChecked + " selected");
+        return false;
+    }
+    if (negativeChecked !== 7) {
+        alert("7 negative adjectives must be selected. You have " + negativeChecked + " selected");
+        return false;
+    }
+}
