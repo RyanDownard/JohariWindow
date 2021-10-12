@@ -4,21 +4,44 @@
 }
 
 <div class="container">
-    <div class="row mb-4">
-        <h2>Johari Window for FirstName LastName</h2>
-    </div>
-    <div class="row">
-        <div class="col-6 border m-0 " style="height: 100px;">
-            <h4 class="text-center">Open Self</h4>
+    @foreach (var client in Model.Clients)
+    {
+        <div class="row my-3">
+            <div class="offset-md-1 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span>
+                            @client.FullName
+                        </span>
+
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @if (client.InvitedFriends != null && client.InvitedFriends.Any())
+                            {
+                                <div class="col-6 @(client.InvitedFriends.Count() == client.InvitedFriends.Count(i => i.Accepted) ? "text-success" : "text-danger")">
+                                    <strong>Invites Sent: </strong> @client.InvitedFriends.Count()
+                                    <br />
+                                    <strong>Invites Accepted: </strong> @client.InvitedFriends.Count(i => i.Accepted)
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-6 text-danger">
+                                    <strong>Invites Sent: </strong> 0
+                                    <br />
+                                    <strong> Invites Accepted: </strong> 0
+                                </div>
+                            }
+                            <div class="col-md-6">
+                                <button class="btn btn-outline-primary">
+                                    View Window
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-6 border m-0" style="height: 100px;">
-            <h4 class="text-center">Blind Self</h4>
-        </div>
-        <div class="col-6 border m-0" style="height: 100px;">
-            <h4 class="text-center">Hidden Self</h4>
-        </div>
-        <div class="col-6 border m-0" style="height: 100px;">
-            <h4 class="text-center">Unknown Self</h4>
-        </div>
-    </div>
+    }
 </div>

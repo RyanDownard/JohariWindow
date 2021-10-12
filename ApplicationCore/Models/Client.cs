@@ -17,5 +17,8 @@ namespace ApplicationCore.Models
 
         [NotMapped]
         public string FullName { get { return FirstName + " " + LastName; } }
+
+        [ForeignKey("ClientID")]
+        public virtual List<InvitedFriend> InvitedFriends { get; set; }
     }
 }

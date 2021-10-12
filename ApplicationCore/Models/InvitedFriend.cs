@@ -14,7 +14,7 @@ namespace ApplicationCore.Models
         public string Email { get; set; }
         public bool Accepted { get; set; }
 
-        [ForeignKey("ClientID")]
-        public Client Client { get; set; }
+        //[ForeignKey("ClientID")]
+        //public Client Client { get; set; }
     }
 }
