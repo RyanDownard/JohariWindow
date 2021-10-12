@@ -1,12 +1,15 @@
 ﻿@page "{clientID}/{invitedFriendID}"
 @model JohariWindow.Pages.Client.FriendModel
+@{
+    ViewData["Title"] = "Friend Response";
+}
 
 <form method="post" asp-action="Index" onsubmit="return validateCheckBoxes()">
     <div class="container">
         <input type="hidden" asp-for="@Model.FriendResponseVM.ClientID" value="@Model.FriendResponseVM.ClientID" />
         <input type="hidden" asp-for="@Model.FriendResponseVM.InvitedFriendID" value="@Model.FriendResponseVM.InvitedFriendID" />
         <div id="relationshipPortion">
-            <h3 class="border-bottom">Relationship To @Model.Client.FirstName @Model.Client.LastName</h3>
+            <h3 class="border-bottom">Relationship To @Model.Client.FullName</h3>
             <div class="row" id="relationshipError" style="display:none;">
                 <div class="alert alert-danger">
                     Relationship and how long must be filled out before continuing
@@ -31,7 +34,7 @@
                 </div>
             </div>
             <div class="row:">
-                <button type="button" id="btnContinue" class="btn btn-outline-success">Continue</button>
+                <button type="button" id="btnContinue" class="btn btn-success">Continue</button>
             </div>
         </div>
         <div id="adjectivesPortion" style="display: none;">
@@ -39,7 +42,7 @@
                 <div class="col-12 my-3">
                     <h3 class="border-bottom">Personality Traits</h3>
                     @*Parenthesis are for making it so the apostrophe doesn't look odd*@
-                    Select the responses that fit @(Model.Client.FirstName) @(Model.Client.LastName)'s personality.
+                    Select the responses that fit @(Model.Client.FullName)'s personality.
                     <br />
                     Please select 12 positive and 7 negative adjectives.
                     <br />
@@ -49,38 +52,42 @@
                     <strong>If you do not understand the adjective, hover over to word for additional information</strong>
                 </div>
             </div>
-            <h3 class="border-bottom">Positives (12)</h3>
-            <div class="row">
-                @for (int i = 0; i < Model.FriendResponseVM.PositiveAdjectives.Count; i++)
-                {
-                    <div class="col-4 mb-3">
-                        <input asp-for="@Model.FriendResponseVM.PositiveAdjectives[i].Value" type="hidden" />
-                        <input asp-for="@Model.FriendResponseVM.PositiveAdjectives[i].Text" type="hidden" />
-                        <input class="positiveAttribute" id="@Model.FriendResponseVM.PositiveAdjectives[i].Text" asp-for="@Model.FriendResponseVM.PositiveAdjectives[i].Selected" />
-                        <label for="@Model.FriendResponseVM.PositiveAdjectives[i].Text"
-                               data-bs-toggle="tooltip" data-bs-placement="top" title="@Model.AllAdjectives[i].AdjDefinition">
-                            @Model.FriendResponseVM.PositiveAdjectives[i].Text
-                        </label>
-                    </div>
-                }
+            <div class="border border-dark p-3 rounded mb-5">
+                <h3 class="border-bottom">Positives (12)</h3>
+                <div class="row">
+                    @for (int i = 0; i < Model.FriendResponseVM.PositiveAdjectives.Count; i++)
+                    {
+                        <div class="col-4 mb-3">
+                            <input asp-for="@Model.FriendResponseVM.PositiveAdjectives[i].Value" type="hidden" />
+                            <input asp-for="@Model.FriendResponseVM.PositiveAdjectives[i].Text" type="hidden" />
+                            <input class="positiveAttribute" id="@Model.FriendResponseVM.PositiveAdjectives[i].Text" asp-for="@Model.FriendResponseVM.PositiveAdjectives[i].Selected" />
+                            <label for="@Model.FriendResponseVM.PositiveAdjectives[i].Text"
+                                   data-bs-toggle="tooltip" data-bs-placement="top" title="@Model.AllAdjectives[i].AdjDefinition">
+                                @Model.FriendResponseVM.PositiveAdjectives[i].Text
+                            </label>
+                        </div>
+                    }
+                </div>
             </div>
-            <h3 class="border-bottom">Negatives (7)</h3>
-            <div class="row">
-                @for (int i = 0; i < Model.FriendResponseVM.NegativeAdjectives.Count; i++)
-                {
-                    <div class="col-4 mb-3">
-                        <input asp-for="@Model.FriendResponseVM.NegativeAdjectives[i].Value" type="hidden" />
-                        <input asp-for="@Model.FriendResponseVM.NegativeAdjectives[i].Text" type="hidden" />
-                        <input class="negativeAttribute" id="@Model.FriendResponseVM.NegativeAdjectives[i].Text" asp-for="@Model.FriendResponseVM.NegativeAdjectives[i].Selected" />
-                        <label for="@Model.FriendResponseVM.NegativeAdjectives[i].Text"
-                               data-bs-toggle="tooltip" data-bs-placement="top" title="@Model.AllAdjectives[i].AdjDefinition">
-                            @Model.FriendResponseVM.NegativeAdjectives[i].Text
-                        </label>
-                    </div>
-                }
+            <div class="border border-dark p-3 rounded mb-5">
+                <h3 class="border-bottom">Negatives (7)</h3>
+                <div class="row">
+                    @for (int i = 0; i < Model.FriendResponseVM.NegativeAdjectives.Count; i++)
+                    {
+                        <div class="col-4 mb-3">
+                            <input asp-for="@Model.FriendResponseVM.NegativeAdjectives[i].Value" type="hidden" />
+                            <input asp-for="@Model.FriendResponseVM.NegativeAdjectives[i].Text" type="hidden" />
+                            <input class="negativeAttribute" id="@Model.FriendResponseVM.NegativeAdjectives[i].Text" asp-for="@Model.FriendResponseVM.NegativeAdjectives[i].Selected" />
+                            <label for="@Model.FriendResponseVM.NegativeAdjectives[i].Text"
+                                   data-bs-toggle="tooltip" data-bs-placement="top" title="@Model.AllAdjectives[i].AdjDefinition">
+                                @Model.FriendResponseVM.NegativeAdjectives[i].Text
+                            </label>
+                        </div>
+                    }
+                </div>
             </div>
             <div>
-                <button type="submit" class="btn btn-outline-success">Submit</button>
+                <button type="submit" class="btn btn-success">Submit</button>
             </div>
         </div>
     </div>

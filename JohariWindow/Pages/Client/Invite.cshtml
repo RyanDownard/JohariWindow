@@ -1,6 +1,7 @@
 ﻿@page "{clientID}"
 @model JohariWindow.Pages.Client.InviteModel
 @{
+    ViewData["Title"] = "Invite Users";
 }
 <form method="post" asp-action="Index">
     <div class="container">
@@ -13,7 +14,7 @@
             </div>
         </div>
         <div id="emailList">
-            <div class="form-group row my-2">
+            <div class="form-group row my-4">
                 <div class="col-auto">
                     <label>Friend 1</label>
                 </div>
@@ -21,7 +22,7 @@
                     <input type="email" required class="form-control" name="emails[0]" />
                 </div>
             </div>
-            <div class="form-group row my-2">
+            <div class="form-group row my-4">
                 <div class="col-auto">
                     <label>Friend 2</label>
                 </div>
@@ -29,7 +30,7 @@
                     <input type="email" required class="form-control" name="emails[1]" />
                 </div>
             </div>
-            <div class="form-group row my-2">
+            <div class="form-group row my-4">
                 <div class="col-auto">
                     <label>Friend 3</label>
                 </div>
@@ -37,7 +38,7 @@
                     <input type="email" required class="form-control" name="emails[2]" />
                 </div>
             </div>
-            <div class="form-group row my-2">
+            <div class="form-group row my-4">
                 <div class="col-auto">
                     <label>Friend 4</label>
                 </div>
@@ -48,7 +49,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <button type="submit" class="btn btn-outline-success">Send Invites</button>
+                <button type="submit" class="btn btn-success">Send Invites</button>
             </div>
         </div>
     </div>

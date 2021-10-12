@@ -1,23 +1,82 @@
 ﻿@page "{ClientID}"
 @model JohariWindow.Pages.Admin.WindowModel
 @{
+    ViewData["Title"] = $"Johari Window - {Model.Client.FullName}";
 }
 <div class="container">
+    <div class="row mb-2">
+        <a asp-page="Index" class="btn btn-outline-dark">
+            <i class="fas fa-arrow-left"></i>
+            Back To Clients
+        </a>
+    </div>
     <div class="row mb-4">
-        <h2>Johari Window for @Model.Client.FullName</h2>
+        <h2>Johari Window - @Model.Client.FullName</h2>
     </div>
-    <div class="row">
-        <div class="col-6 border m-0 " style="height: 100px;">
-            <h4 class="text-center">Open Self</h4>
+    @if (Model.ValidWindow)
+    {
+        <div class="row">
+            <div class="col-6 border border-dark m-0 johariWindow openSelf">
+                <h4 class="text-center johariTitle">Open Self</h4>
+                <div class="row">
+                    @foreach (var adjective in Model.WindowVM.OpenSelf)
+                    {
+                        string textClasses = "";
+                        int matchCount = Model.FriendResponses.Count(i => i.Adjective.AdjName == adjective);
+                        if (matchCount == 2)
+                        {
+                            textClasses = "font-weight-bold";
+                        }
+                        else if (matchCount == 3)
+                        {
+                            textClasses = "font-weight-bold underline";
+                        }
+                        <div class="col-md-4 mb-2 @textClasses" style="font-family: Verdana">
+                            @adjective
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-6 border border-dark m-0 johariWindow blindSelf">
+                <h4 class="text-center johariTitle">Blind Self</h4>
+                <div class="row">
+                    @foreach (var adjective in Model.WindowVM.BlindSelf)
+                    {
+                        <div class="col-md-4 mb-2" style="font-family: Verdana">
+                            @adjective
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-6 border border-dark m-0 johariWindow hiddenSelf">
+                <h4 class="text-center johariTitle">Hidden Self</h4>
+                <div class="row">
+                    @foreach (var adjective in Model.WindowVM.HiddenSelf)
+                    {
+                        <div class="col-md-4 mb-2" style="font-family: Verdana">
+                            @adjective
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-6 border border-dark m-0 johariWindow unknownSelf">
+                <h4 class="text-center johariTitle">Unknown Self</h4>
+                <div class="row">
+                    @foreach (var adjective in Model.WindowVM.UnknownSelf)
+                    {
+                        <div class="col-md-4 mb-2" style="font-family: Verdana">
+                            @adjective
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
-        <div class="col-6 border m-0" style="height: 100px;">
-            <h4 class="text-center">Blind Self</h4>
+    }
+    else
+    {
+        <div class="px-3 py-2">
+            This client has not submitted a response <strong class="text-danger">and</strong> had at least one friend submit a response.
+            A Johari Window cannot be viewed until these requirements are met.
         </div>
-        <div class="col-6 border m-0" style="height: 100px;">
-            <h4 class="text-center">Hidden Self</h4>
-        </div>
-        <div class="col-6 border m-0" style="height: 100px;">
-            <h4 class="text-center">Unknown Self</h4>
-        </div>
-    </div>
+    }
 </div>

@@ -10,7 +10,7 @@
             <div class="card">
                 <div class="card-body px-lg-5 pt-4">
                     <form method="post" autocomplete="off" asp-route-returnUrl="@Model.ReturnUrl">
-                        <h3 class="col-12 text-primary text-center py-4">
+                        <h3 class="col-12 text-center py-4">
                             @if (User.IsInRole(StaticDetails.AdminRole))
                             {
                                 <strong>Register a User</strong>
@@ -66,7 +66,7 @@
                             <span asp-validation-for="Input.Password" class="text-danger"></span>
                         </div>
                         <div class="py-2">
-                            <input type="password" asp-for="Input.ConfirmPassword" autocomplete="off" placeholder="ConfirmPassword" class="form-control" />
+                            <input type="password" asp-for="Input.ConfirmPassword" autocomplete="off" placeholder="Confirm Password" class="form-control" />
                             <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                         </div>
                         @if (User.IsInRole(StaticDetails.AdminRole))

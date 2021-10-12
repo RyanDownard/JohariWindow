@@ -15,5 +15,7 @@ namespace ApplicationCore.Models
 
         [ForeignKey("ClientID")]
         public virtual Client Client { get; set; }
+        [ForeignKey("AdjectiveID")]
+        public virtual Adjective Adjective { get; set; }
     }
 }

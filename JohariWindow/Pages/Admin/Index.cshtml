@@ -1,10 +1,11 @@
 ﻿@page
 @model JohariWindow.Pages.Admin.IndexModel
 @{
+    ViewData["Title"] = "Clients";
 }
 
 <div class="container">
-    <div class="row">
+    <div class="row border-bottom border-secondary">
         <div class="offset-lg-1 col-lg-6">
             <div class="py-2">
                 <h2>Filter Clients</h2>
@@ -12,7 +13,6 @@
             </div>
         </div>
     </div>
-    <hr />
     @foreach (var client in Model.Clients.OrderBy(i => i.FirstName).ThenBy(i => i.LastName))
     {
         <div class="row my-3 clientRow" data-client-name="@client.FullName">
@@ -22,7 +22,6 @@
                         <h4>
                             @client.FullName
                         </h4>
-
                     </div>
                     <div class="card-body">
                         <div class="row">
