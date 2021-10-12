@@ -9,7 +9,7 @@ namespace JohariWindow.Pages.Admin
 {
     public class WindowModel : PageModel
     {
-        public void OnGet()
+        public void OnGet(int ClientID)
         {
         }
     }
