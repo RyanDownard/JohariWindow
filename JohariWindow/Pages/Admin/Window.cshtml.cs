@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore.Interfaces;
 using ApplicationCore.Models;
+using Infrastructure.Services;
 using JohariWindow.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -21,8 +22,12 @@ namespace JohariWindow.Pages.Admin
         public WindowModel(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
 
-        public void OnGet(int ClientID)
+        public IActionResult OnGet(int ClientID)
         {
+            if (!User.IsInRole(StaticDetails.AdminRole))
+            {
+                return BadRequest();
+            }
             Client = _unitOfWork.Client.Get(i => i.ClientID == ClientID);
             var adjectives = _unitOfWork.Adjective.List();
             ClientResponses = _unitOfWork.ClientResponse.List(i => i.ClientID == ClientID, null, "Adjective").ToList();
@@ -55,6 +60,7 @@ namespace JohariWindow.Pages.Admin
                                         &&
                                         !WindowVM.HiddenSelf.Select(i => i.AdjName).Contains(i.AdjName)).OrderBy(i => i.AdjName).ToList();
             }
+            return Page();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace JohariWindow.Pages.Admin
         {
             if (!User.IsInRole(StaticDetails.AdminRole))
             {
-                return NotFound();
+                return BadRequest();
             }
             Clients = _unitOfWork.Client.List(null, null, "InvitedFriends").ToList();
             return Page();

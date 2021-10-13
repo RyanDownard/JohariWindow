@@ -126,14 +126,7 @@ namespace JohariWindow.Areas.Identity.Pages.Account
                 }
                 if (result.Succeeded)
                 {
-                    if (_userManager.GetUsersInRoleAsync(StaticDetails.AdminRole).Result.Count == 0)
-                    {
-                        await _userManager.AddToRoleAsync(user, StaticDetails.AdminRole);
-                    }
-                    else
-                    {
-                        await _userManager.AddToRoleAsync(user, StaticDetails.UserRole);
-                    }
+                    await _userManager.AddToRoleAsync(user, StaticDetails.UserRole);
                     _logger.LogInformation("User created a new account with password.");
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
