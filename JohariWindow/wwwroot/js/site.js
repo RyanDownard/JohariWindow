@@ -19,3 +19,11 @@ function validateCheckBoxes() {
         return false;
     }
 }
+
+$(".positiveAttribute").click(function () {
+    $("#positiveTotal").text($('.positiveAttribute:checkbox:checked').length);
+});
+
+$(".negativeAttribute").click(function () {
+    $("#negativeTotal").text($('.negativeAttribute:checkbox:checked').length);
+});

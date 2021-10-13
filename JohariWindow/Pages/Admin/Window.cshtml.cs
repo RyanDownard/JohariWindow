@@ -35,25 +35,25 @@ namespace JohariWindow.Pages.Admin
                                      join f in FriendResponses on c.AdjectiveID equals f.AdjectiveID into gj
                                      from gjf in gj.DefaultIfEmpty()
                                      where gjf is not null
-                                     select c.Adjective.AdjName).Distinct().OrderBy(i => i).ToList();
+                                     select c.Adjective).Distinct().OrderBy(i => i.AdjName).ToList();
 
                 WindowVM.BlindSelf = (from f in FriendResponses
                                       join c in ClientResponses on f.AdjectiveID equals c.AdjectiveID into gj
                                       from gjc in gj.DefaultIfEmpty()
                                       where gjc is null
-                                      select f.Adjective.AdjName).Distinct().OrderBy(i => i).ToList();
+                                      select f.Adjective).Distinct().OrderBy(i => i.AdjName).ToList();
 
                 WindowVM.HiddenSelf = (from c in ClientResponses
                                        join f in FriendResponses on c.AdjectiveID equals f.AdjectiveID into gj
                                        from gjf in gj.DefaultIfEmpty()
                                        where gjf is null
-                                       select c.Adjective.AdjName).Distinct().OrderBy(i => i).ToList();
+                                       select c.Adjective).Distinct().OrderBy(i => i.AdjName).ToList();
                 WindowVM.UnknownSelf = adjectives.Where(i =>
-                                        !WindowVM.OpenSelf.Contains(i.AdjName)
+                                        !WindowVM.OpenSelf.Select(i => i.AdjName).Contains(i.AdjName)
                                         &&
-                                        !WindowVM.BlindSelf.Contains(i.AdjName)
+                                        !WindowVM.BlindSelf.Select(i => i.AdjName).Contains(i.AdjName)
                                         &&
-                                        !WindowVM.HiddenSelf.Contains(i.AdjName)).Select(x => x.AdjName).OrderBy(i => i).ToList();
+                                        !WindowVM.HiddenSelf.Select(i => i.AdjName).Contains(i.AdjName)).OrderBy(i => i.AdjName).ToList();
             }
         }
     }

@@ -78,7 +78,7 @@ body {
 
 
 .johariWindow {
-    height: 250px;
+    height: 350px;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -98,4 +98,8 @@ body {
 
 .johariTitle {
     font-family: 'Comic Sans MS';
+}
+
+.johariAdjective {
+    font-family: Verdana;
 }

@@ -16,13 +16,14 @@
     @if (Model.ValidWindow)
     {
         <div class="row">
-            <div class="col-6 border border-dark m-0 johariWindow openSelf">
+            <div class="col-6 border border-dark p-2 m-0 johariWindow openSelf">
                 <h4 class="text-center johariTitle">Open Self</h4>
-                <div class="row">
-                    @foreach (var adjective in Model.WindowVM.OpenSelf)
+                <h5 class="border-bottom border-dark">Positive</h5>
+                <div class="row mb-3">
+                    @foreach (var adjective in Model.WindowVM.OpenSelf.Where(i => i.AdjType))
                     {
                         string textClasses = "";
-                        int matchCount = Model.FriendResponses.Count(i => i.Adjective.AdjName == adjective);
+                        int matchCount = Model.FriendResponses.Count(i => i.Adjective.AdjName == adjective.AdjName);
                         if (matchCount == 2)
                         {
                             textClasses = "font-weight-bold";
@@ -31,41 +32,106 @@
                         {
                             textClasses = "font-weight-bold underline";
                         }
-                        <div class="col-md-4 mb-2 @textClasses" style="font-family: Verdana">
-                            @adjective
+                        <div class="col-lg-4 mb-2 johariAdjective @textClasses">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="@adjective.AdjDefinition">
+                                @adjective.AdjName
+                            </span>
+                        </div>
+                    }
+                </div>
+                <h5 class="border-bottom border-dark">Negative</h5>
+                <div class="row">
+                    @foreach (var adjective in Model.WindowVM.OpenSelf.Where(i => !i.AdjType))
+                    {
+                        string textClasses = "";
+                        int matchCount = Model.FriendResponses.Count(i => i.Adjective.AdjName == adjective.AdjName);
+                        if (matchCount == 2)
+                        {
+                            textClasses = "font-weight-bold";
+                        }
+                        else if (matchCount == 3)
+                        {
+                            textClasses = "font-weight-bold underline";
+                        }
+                        <div class="col-lg-4 mb-2 johariAdjective @textClasses">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="@adjective.AdjDefinition">
+                                @adjective.AdjName
+                            </span>
                         </div>
                     }
                 </div>
             </div>
-            <div class="col-6 border border-dark m-0 johariWindow blindSelf">
+            <div class="col-6 border border-dark p-2 m-0 johariWindow blindSelf">
                 <h4 class="text-center johariTitle">Blind Self</h4>
-                <div class="row">
-                    @foreach (var adjective in Model.WindowVM.BlindSelf)
+                <h5 class="border-bottom border-dark">Positive</h5>
+                <div class="row mb-3">
+                    @foreach (var adjective in Model.WindowVM.BlindSelf.Where(i => i.AdjType))
                     {
-                        <div class="col-md-4 mb-2" style="font-family: Verdana">
-                            @adjective
+                        <div class="col-lg-4 mb-2 johariAdjective">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="@adjective.AdjDefinition">
+                                @adjective.AdjName
+                            </span>
+                        </div>
+                    }
+                </div>
+                <h5 class="border-bottom border-dark">Negative</h5>
+                <div class="row">
+                    @foreach (var adjective in Model.WindowVM.BlindSelf.Where(i => !i.AdjType))
+                    {
+                        <div class="col-lg-4 mb-2 johariAdjective">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="@adjective.AdjDefinition">
+                                @adjective.AdjName
+                            </span>
                         </div>
                     }
                 </div>
             </div>
-            <div class="col-6 border border-dark m-0 johariWindow hiddenSelf">
+            <div class="col-6 border border-dark p-2 m-0 johariWindow hiddenSelf">
                 <h4 class="text-center johariTitle">Hidden Self</h4>
-                <div class="row">
-                    @foreach (var adjective in Model.WindowVM.HiddenSelf)
+                <h5 class="border-bottom border-dark">Positive</h5>
+                <div class="row mb-3">
+                    @foreach (var adjective in Model.WindowVM.HiddenSelf.Where(i => i.AdjType))
                     {
-                        <div class="col-md-4 mb-2" style="font-family: Verdana">
-                            @adjective
+                        <div class="col-lg-4 mb-2 johariAdjective">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="@adjective.AdjDefinition">
+                                @adjective.AdjName
+                            </span>
+                        </div>
+                    }
+                </div>
+                <h5 class="border-bottom border-dark">Negative</h5>
+                <div class="row">
+                    @foreach (var adjective in Model.WindowVM.HiddenSelf.Where(i => !i.AdjType))
+                    {
+                        <div class="col-lg-4 mb-2 johariAdjective">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="@adjective.AdjDefinition">
+                                @adjective.AdjName
+                            </span>
                         </div>
                     }
                 </div>
             </div>
-            <div class="col-6 border border-dark m-0 johariWindow unknownSelf">
+            <div class="col-6 border border-dark p-2 m-0 johariWindow unknownSelf">
                 <h4 class="text-center johariTitle">Unknown Self</h4>
-                <div class="row">
-                    @foreach (var adjective in Model.WindowVM.UnknownSelf)
+                <h5 class="border-bottom border-dark">Positive</h5>
+                <div class="row mb-3">
+                    @foreach (var adjective in Model.WindowVM.UnknownSelf.Where(i => i.AdjType))
                     {
-                        <div class="col-md-4 mb-2" style="font-family: Verdana">
-                            @adjective
+                        <div class="col-lg-4 mb-2 johariAdjective">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="@adjective.AdjDefinition">
+                                @adjective.AdjName
+                            </span>
+                        </div>
+                    }
+                </div>
+                <h5 class="border-bottom border-dark">Negative</h5>
+                <div class="row">
+                    @foreach (var adjective in Model.WindowVM.UnknownSelf.Where(i => !i.AdjType))
+                    {
+                        <div class="col-lg-4 mb-2 johariAdjective">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="@adjective.AdjDefinition">
+                                @adjective.AdjName
+                            </span>
                         </div>
                     }
                 </div>

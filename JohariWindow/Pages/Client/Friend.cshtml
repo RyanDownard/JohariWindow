@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div class="border border-dark p-3 rounded mb-5">
-                <h3 class="border-bottom">Positives (12)</h3>
+                <h3 class="border-bottom">Positives (<span id="positiveTotal">0</span>/12)</h3>
                 <div class="row">
                     @for (int i = 0; i < Model.FriendResponseVM.PositiveAdjectives.Count; i++)
                     {
@@ -70,7 +70,7 @@
                 </div>
             </div>
             <div class="border border-dark p-3 rounded mb-5">
-                <h3 class="border-bottom">Negatives (7)</h3>
+                <h3 class="border-bottom">Negatives (<span id="negativeTotal">0</span>/7)</h3>
                 <div class="row">
                     @for (int i = 0; i < Model.FriendResponseVM.NegativeAdjectives.Count; i++)
                     {
@@ -107,7 +107,6 @@
                 $("#relationshipPortion").hide();
                 $("#adjectivesPortion").fadeIn(500);
             });
-
         });
     </script>
 }
