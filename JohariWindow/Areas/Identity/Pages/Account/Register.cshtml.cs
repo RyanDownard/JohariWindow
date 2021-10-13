@@ -28,7 +28,7 @@ namespace JohariWindow.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly IUnitOfWork _unitOfWork;
         private readonly RoleManager<IdentityRole> _roleManager;
-
+        private Client Client;
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -97,14 +97,14 @@ namespace JohariWindow.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/"); //null-coalescing assignment operator ??= assigns the value of right-hand operand to its left-hand operand only if the left-hand is nulll
             if (ModelState.IsValid)
             {
-                var client = new Client
+                Client = new Client
                 {
                     FirstName = Input.FirstName,
                     LastName = Input.LastName,
                     DOB = Input.DOB,
                     Gender = Input.Gender
                 };
-                _unitOfWork.Client.Add(client);
+                _unitOfWork.Client.Add(Client);
                 _unitOfWork.Commit();
                 //expand identityuser with applicationuser properties
                 var user = new ApplicationUser
@@ -112,7 +112,7 @@ namespace JohariWindow.Areas.Identity.Pages.Account
                     UserName = Input.Email,
                     Email = Input.Email,
                     PhoneNumber = Input.PhoneNumber,
-                    Client = client
+                    ClientID = Client.ClientID
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -126,7 +126,14 @@ namespace JohariWindow.Areas.Identity.Pages.Account
                 }
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, StaticDetails.UserRole);
+                    if (User.IsInRole(StaticDetails.AdminRole))
+                    {
+                        await _userManager.AddToRoleAsync(user, StaticDetails.AdminRole);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, StaticDetails.UserRole);
+                    }
                     _logger.LogInformation("User created a new account with password.");
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -143,13 +150,23 @@ namespace JohariWindow.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        if (User.IsInRole(StaticDetails.AdminRole))
+                        {
+                            return RedirectToPage("/Admin/Index");
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
                     }
                 }
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
+                    //delete wrongly created users
+                    _unitOfWork.Client.Delete(Client);
+                    _unitOfWork.Commit();
                 }
             }
             // If we got this far, something failed, redisplay form

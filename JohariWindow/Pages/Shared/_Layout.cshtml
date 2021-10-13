@@ -28,24 +28,27 @@
                     <partial name="_LoginPartial" />
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <ul class="navbar-nav flex-grow-1">
-                            @if (User.IsInRole(StaticDetails.AdminRole))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-page="/Admin/Index">Clients</a>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-page="/Client/Index" asp-route-clientID="@appUser.ClientID">Submit Response</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-page="/Client/Invite" asp-route-clientID="@appUser.ClientID">Invite Friend</a>
-                                </li>
-                            }
+                <ul class="navbar-nav flex-grow-1">
+                    @if (User.IsInRole(StaticDetails.AdminRole))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Admin/Index">Clients</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Create User</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Client/Index" asp-route-clientID="@appUser.ClientID">Submit Response</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Client/Invite" asp-route-clientID="@appUser.ClientID">Invite Friend</a>
+                        </li>
+                    }
 
-                        </ul>
+                </ul>
                     }
                 </div>
             </div>

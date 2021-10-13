@@ -20,5 +20,8 @@ namespace ApplicationCore.Models
 
         [ForeignKey("ClientID")]
         public virtual List<InvitedFriend> InvitedFriends { get; set; }
+
+        [InverseProperty("Client")]
+        public virtual ApplicationUser ApplicationUser { get; set; }
     }
 }
