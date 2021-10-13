@@ -17,9 +17,11 @@ namespace JohariWindow.Pages.Client
         public FriendResponseViewModel FriendResponseVM { get; set; }
         public ApplicationCore.Models.Client Client;
         public List<Adjective> AllAdjectives;
+        public List<SelectListItem> Relationships;
+        public List<SelectListItem> Times;
         private Friend Friend;
         private readonly IUnitOfWork _unitOfWork;
-        public FriendModel(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork; 
+        public FriendModel(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
         public IActionResult OnGet(int clientID, int invitedFriendID)
         {
             if (!_unitOfWork.Client.List().Any(i => i.ClientID == clientID) || !_unitOfWork.InvitedFriend.List().Any(i => i.InvitedFriendID == invitedFriendID))
@@ -27,7 +29,7 @@ namespace JohariWindow.Pages.Client
                 return NotFound();
             }
 
-            if(_unitOfWork.InvitedFriend.List().Any(i => i.InvitedFriendID == invitedFriendID && i.Accepted))
+            if (_unitOfWork.InvitedFriend.List().Any(i => i.InvitedFriendID == invitedFriendID && i.Accepted))
             {
                 return BadRequest();
             }
@@ -38,12 +40,40 @@ namespace JohariWindow.Pages.Client
                 InvitedFriendID = invitedFriendID
             };
             LoadAdjectives();
+            LoadRelationships();
+            LoadTimes();
             return Page();
         }
 
+        private void LoadTimes()
+        {
+            Times = new List<SelectListItem>
+            {
+                new SelectListItem{ Text = "0-12 Months", Value = "0-12 Months" },
+                new SelectListItem{ Text = "1 Year", Value = "1 Year" },
+                new SelectListItem{ Text = "2 Years", Value = "2 Years" },
+                new SelectListItem{ Text = "3-5 Years", Value = "3-5 Years" },
+                new SelectListItem{ Text = "5-10 Years", Value = "5-10 Years" },
+                new SelectListItem{ Text = "10+ Years", Value = "10 + Years" }
+            };
+        }
+
+        private void LoadRelationships()
+        {
+            Relationships = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Acquaintance", Value = "Acquaintance"},
+                new SelectListItem{ Text = "Coworker", Value = "Coworker" },
+                new SelectListItem{ Text = "Friend", Value = "Friend" },
+                new SelectListItem{ Text = "Neighbor", Value = "Neighbor" },
+                new SelectListItem{ Text = "Parent", Value = "Parent" },
+                new SelectListItem{ Text = "Sibling", Value = "Sibling" }
+            };
+        }
+
         public IActionResult OnPost()
-        { 
-             if (!ModelState.IsValid)
+        {
+            if (!ModelState.IsValid)
             {
                 return Page();
             }

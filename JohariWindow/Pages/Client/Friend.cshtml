@@ -20,8 +20,9 @@
                     <label asp-for="@Model.FriendResponseVM.Relationship"></label>
                 </div>
                 <div class="col-9">
-                    <input class="form-control" asp-for="@Model.FriendResponseVM.Relationship" />
-                    <span class="text-danger" asp-validation-for="@Model.FriendResponseVM.Relationship"></span>
+                    <select class="form-control" asp-for="@Model.FriendResponseVM.Relationship" asp-items="@Model.Relationships"></select>
+                    @*<input class="form-control" asp-for="@Model.FriendResponseVM.Relationship" />
+                    <span class="text-danger" asp-validation-for="@Model.FriendResponseVM.Relationship"></span>*@
                 </div>
             </div>
             <div class="form-group row">
@@ -29,8 +30,9 @@
                     <label asp-for="@Model.FriendResponseVM.HowLong"></label>
                 </div>
                 <div class="col-9">
-                    <input class="form-control" asp-for="@Model.FriendResponseVM.HowLong" />
-                    <span class="text-danger" asp-validation-for="@Model.FriendResponseVM.HowLong"></span>
+                    <select class="form-control" asp-for="@Model.FriendResponseVM.HowLong" asp-items="@Model.Times"></select>
+                    @*<input class="form-control" asp-for="@Model.FriendResponseVM.HowLong" />
+                    <span class="text-danger" asp-validation-for="@Model.FriendResponseVM.HowLong"></span>*@
                 </div>
             </div>
             <div class="row:">
