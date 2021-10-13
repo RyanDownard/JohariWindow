@@ -27,3 +27,22 @@ $(".positiveAttribute").click(function () {
 $(".negativeAttribute").click(function () {
     $("#negativeTotal").text($('.negativeAttribute:checkbox:checked').length);
 });
+
+
+function printDiv(idToPrint) {
+    var mywindow = window.open('', 'PRINT');
+
+    mywindow.document.write('<html><head><title>' + document.title + '</title>');
+    mywindow.document.write('<link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />');
+    mywindow.document.write('<link rel="stylesheet" href="/lib/fontawesome/css/all.min.css" />');
+    mywindow.document.write('<link rel="stylesheet" href="/css/site.css" />');
+    mywindow.document.write('</head><body><div class="container">');
+    mywindow.document.write(document.getElementById(idToPrint).innerHTML);
+    mywindow.document.write('</div></body></html>');
+
+    mywindow.document.close(); // necessary for IE >= 10
+    mywindow.focus(); // necessary for IE >= 10*/
+
+    mywindow.print();
+    mywindow.close();
+}

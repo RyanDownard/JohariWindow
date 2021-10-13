@@ -87,35 +87,23 @@ body {
     .johariWindow{
         height: auto;
     }
-
-    .openSelf {
-        -webkit-print-color-adjust: exact;
-    }
-
-    .blindSelf {
-        -webkit-print-color-adjust: exact;
-    }
-
-    .hiddenSelf {
-        -webkit-print-color-adjust: exact;
-    }
-
-    .unknownSelf {
-        -webkit-print-color-adjust: exact;
-    }
 }
 
 .openSelf {
     background-color: rgba(179, 194, 141, .5);
+    -webkit-print-color-adjust: exact;
 }
 .blindSelf {
     background-color: rgba(141, 194, 164, .5);
+    -webkit-print-color-adjust: exact;
 }
 .hiddenSelf {
     background-color: rgba(141, 175, 194, .5);
+    -webkit-print-color-adjust: exact;
 }
 .unknownSelf {
     background-color: rgba(194, 141, 150, .5);
+    -webkit-print-color-adjust: exact;
 }
 
 .johariTitle {
