@@ -9,10 +9,13 @@
             <i class="fas fa-arrow-left"></i>
             Back To Clients
         </a>
-        <button type="button" class="btn btn-outline-info" onclick="printDiv('printWindow')">
-            <i class="fas fa-print"></i>
-            Print
-        </button>
+        @if (Model.ValidWindow)
+        {
+            <button type="button" class="btn btn-outline-info" onclick="printDiv('printWindow')">
+                <i class="fas fa-print"></i>
+                Print
+            </button>
+        }
     </div>
     <div id="printWindow">
         <div class="row mb-4">
