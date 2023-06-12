@@ -1,0 +1,156 @@
+﻿@using MudBlazor;
+@using SteakGrillingGuide.Data;
+@using SteakGrillingGuide.Extensions;
+@inject IDialogService DialogService
+@inject SteakProvider SteakProvider
+@page "/"
+
+<div class="row mb-3">
+    <div class="col-6">
+        <button class="btn btn btn-success" @onclick="StartTimer">
+            <MudIcon Icon="@Icons.Material.Outlined.Timer" Title="Timer" /> Start Timer
+        </button>
+    </div>
+    <div class="col-6 text-end">
+        <button class="btn btn btn-secondary" @onclick="OpenDialog">
+            <MudIcon Icon="@Icons.Material.Outlined.AddBox" Title="Add" /> Add A Steak
+        </button>
+    </div>
+</div>
+<div class="row">
+    @($"{Minutes:0}:{Seconds:00}")
+</div>
+@if (Steaks.Any())
+{
+    <div>
+        Total Grill Time: @LongestTime minutes
+    </div>
+    foreach (var steak in Steaks)
+    {
+        var sideOneStart = steak.GetSideOneStartTime(LongestTime);
+        var sideTwoStart = steak.GetSideTwoStartTime(LongestTime);
+        var steakSetting = Settings.First(i => i.CookingStyle == steak.CookingStyle);
+        <div class="row border-bottom border-dark mb-2 p-2">
+            <h3>@steak.Name</h3>
+            <div>
+                <strong>Center Cook:</strong> @(steak.CookingStyle.GetCookingStyleName())
+            </div>
+            <div>
+                <strong>Thickness: </strong> @($"{steak.Thickness}")
+            </div>
+            <div class="w-100">
+                <strong>First Side:</strong>
+                <div class="row">
+                    <div class="col-4">
+                        Duration
+                        <br />
+                        @($"{steak.DurationSetting.FirstSide / 60:0}"):@($"{steak.DurationSetting.FirstSide % 60:00}")
+                    </div>
+                    <div class="col-4">
+                        Starts At
+                        <br />
+
+                        @($"{sideOneStart / 60:0}"):@($"{sideOneStart % 60:00}")
+                    </div>
+                    <div class="col-4">
+                        Percentage
+                        <br />
+                        @steak.GetFirstSidePercentage(counter, LongestTime)%
+                    </div>
+                </div>
+            </div>
+            <div>
+                <strong>Second Side:</strong> @steak.DurationSetting.SecondSide
+                <div class="row">
+                    <div class="col-4">
+                        Duration
+                        <br/>
+                        @($"{steak.DurationSetting.SecondSide / 60:0}"):@($"{steak.DurationSetting.SecondSide % 60:00}")
+                    </div>
+                    <div class="col-4">
+                        Starts At
+                        <br/>
+                        @($"{sideTwoStart / 60:0}"):@($"{sideTwoStart % 60:00}")
+                    </div>
+                    <div class="col-4">
+                        Percentage
+                        <br/>
+                        @steak.GetSecondSidePercentage(counter, LongestTime)%
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div>
+        No steaks added yet.
+    </div>
+}
+
+
+@code {
+    protected List<Steaks> Steaks { get; set; } = new();
+    protected List<SteakSettings> Settings { get; set; }
+    protected double LongestTime { get; set; }
+    private int counter { get; set; } = 60;
+    private int Minutes { get; set; } = 0;
+    private int Seconds { get; set; } = 0;
+    private EventCallback<Steaks> OnDialogClosed { get; set; }
+
+    private static System.Timers.Timer Timer { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        Settings = SteakProvider.SteakSettings;
+        OnDialogClosed = new EventCallback<Steaks>(this, (Steaks steak) => HandleDialogClosed(steak));
+        return base.OnInitializedAsync();
+    }
+
+    private async Task HandleDialogClosed(Steaks steak)
+    {
+        if (string.IsNullOrWhiteSpace(steak.Name))
+        {
+            steak.Name = $"Steak {Steaks.Count + 1}";
+        }
+        Steaks.Add(steak);
+        LongestTime = Steaks.Max(i => i.DurationSetting.TotalTime);
+        counter = (int)(LongestTime * 60);
+        StateHasChanged();
+    }
+
+    private void StartTimer()
+    {
+        Timer = new System.Timers.Timer(1000);
+        Timer.Elapsed += CountDownTimer;
+        Timer.Enabled = true;
+    }
+
+    protected void RemainingToMinuteSecond()
+    {
+        Minutes = (int)(counter / 60);
+        Seconds = (int)(counter % 60);
+    }
+
+    public void CountDownTimer(Object source, System.Timers.ElapsedEventArgs e)
+    {
+        if (counter > 0)
+        {
+            counter -= 1;
+        }
+        else
+        {
+            Timer.Enabled = false;
+        }
+        RemainingToMinuteSecond();
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OpenDialog()
+    {
+        var options = new DialogOptions { DisableBackdropClick = true, FullWidth = true };
+        var parameters = new DialogParameters { ["AddSteak"] = OnDialogClosed };
+        DialogService.Show<NewSteakDialog>("Add Steak", parameters, options);
+    }
+}

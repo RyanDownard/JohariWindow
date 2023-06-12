@@ -1,0 +1,54 @@
+﻿@using MudBlazor;
+@using SteakGrillingGuide.Data;
+@using SteakGrillingGuide.Extensions;
+@using EnumsNET;
+
+
+<MudDialog>
+    <DialogContent>
+        @if (Thicknesses == null)
+        {
+            <div>Processing....</div>
+        }
+        else
+        {
+            @if (!IsValid)
+            {
+                <div class="alert alert-danger">
+                    Thickness and How You Like It Cooked must have a value.
+                </div>
+            }
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Name (Optional)</label>
+                <input @bind-value="Steak.Name" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Name (Optional)">
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Steak Thickness</label>
+                <select @bind="Thickness" class="form-select">
+                    <option selected>Thickness</option>
+                    @foreach (var thickness in Thicknesses)
+                    {
+                        <option value="@thickness">@thickness</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">How Do You Like It Cooked?</label>
+                <select @bind="CookedStyle" class="form-select">
+                    <option selected>Cooking Preference</option>
+                    @foreach (var style in Enum.GetValues(typeof(CookingStyle)))
+                    {
+                        <option value="@((int)style)">@(((CookingStyle)style).GetCookingStyleName())</option>
+                    }
+                </select>
+            </div>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
